@@ -147,10 +147,11 @@ class SpreadsheetDirective(docutils.parsers.rst.Directive):
         Some more complex formulae:
 
           ={a1 * a2}
-          ={@2 * @6}
+          ={b# * f#}
+          ={@1 + @2}
           ={sum("a1:a20")}
 
-        Special characters @ and # are replaced by current row and column,
+        Special characters @ and # are replaced by current column and row,
         respectively.
 
         A cell has value 0 (zero) unless it contains a formula. In
