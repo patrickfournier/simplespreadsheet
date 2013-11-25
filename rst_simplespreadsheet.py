@@ -106,7 +106,7 @@ https://github.com/patrickfournier/simplespreadsheet
 """
 
 __author__  = "Patrick Fournier"
-__version__ = "0.1"
+__version__ = "0.1.0"
 __license__ = "MIT License"
 
 import re
