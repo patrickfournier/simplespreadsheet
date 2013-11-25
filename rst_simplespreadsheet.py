@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 """
+============================================
+ Spreadsheet directive for reStructuredText
+============================================
+
 Register a simplespreadsheet directive to do calculations in a table.
 
 Install
 =======
+::
+
+    pip install rst_simplespreadsheet  # or
+    easy_install rst_simplespreadsheet
 
 Usage
 =====
@@ -106,7 +114,7 @@ https://github.com/patrickfournier/simplespreadsheet
 """
 
 __author__  = "Patrick Fournier"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __license__ = "MIT License"
 
 import re
