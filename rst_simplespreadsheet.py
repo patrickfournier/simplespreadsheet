@@ -1,31 +1,121 @@
 # -*- coding: utf-8 -*-
 """
-Register a simplespreadsheet directive to do simple calculations in a table.
+Register a simplespreadsheet directive to do calculations in a table.
 
-Create a table with the sum, the difference, the product and the
-quotient of 2 and 3 in the third column:
+Install
+=======
 
-  .simplespreadsheet::
-      +------+------+-------------+
-      | ={2} | ={3} | ={a# + b#}  |
-      +------+------+-------------+
-      | ={2} | ={3} | ={a# - b#}  |
-      +------+------+-------------+
-      | ={2} | ={3} | ={a# * b#}  |
-      +------+------+-------------+
-      | ={2} | ={3} | ={a# / b#}  |
-      +------+------+-------------+
+Usage
+=====
 
-See SpreadsheetDirective.resolve documentation for more information on
-formula syntax.
+Use it as an extension to rst2pdf:
 
-For now, the only available function is sum("a1:c6"). You can easily
-add new functions by adding them to SpreadSheet.tools
+  rst2pdf -e <path to simplespreadsheet.py> ...
+
+Syntax
+======
+
+Formulae are pieces of text enclosed in ={...}. Only one formula
+per cell is supported.
+
+The simplest formula is a number, like this:
+
+  ={4}
+
+This define the cell value to 4. A cell has value 0 (zero) unless it
+contains a formula.
+
+You can reference the value of other cells using alphanumerical
+identifiers. Columns are identified using letters, from a to z then
+from aa to az, ba to bz and so on. Rows are identified using
+numbers. The first row is 1 and header rows are not numbered (thus not
+referenceable).
+
+For example, the formula to calculate the product of cells a1 and a2 is:
+
+          ={a1 * a2}
+
+
+There are two special characters, # and @, used to reference the current
+row and the current column, respectively.
+
+For example, to calculate the product of cells b and f on the current row:
+
+          ={b# * f#}
+
+and to calculate the sum of rows 1 and 2 in the current column:
+          ={@1 + @2}
+
+
+Functions
+---------
+
+The spreadsheet can calculate cell values using Python
+functions. These functions have to be defined and registered in the
+SpreadSheet class first.
+
+For now, only the function *sum* is defined:
+
+          ={sum("a1:a20")}
+
+Examples
+========
+
+You can do a simple table with totals like this one:
+
++------+--------+------------------+
+| Qty  | Rate   |  Price           |
++======+========+==================+
+|   2  |   1 $  |  2 $             |
++------+--------+------------------+
+|   4  |   3 $  |  12 $            |
++------+--------+------------------+
+|   1  |   5 $  |  5 $             |
++------+--------+------------------+
+|   3  |   7 $  |  21 $            |
++------+--------+------------------+
+| *Total*       |  40 $            |
++------+--------+------------------+
+
+
+with this code:
+
+  .. simplespreadsheet::
+      +------+--------+-------------------+
+      | Qty  | Price  |  Total            |
+      +======+========+===================+
+      | ={2} | ={1} $ | ={a# * b#} $      |
+      +------+--------+-------------------+
+      | ={4} | ={3} $ | ={a# * b#} $      |
+      +------+--------+-------------------+
+      | ={1} | ={5} $ | ={a# * b#} $      |
+      +------+--------+-------------------+
+      | ={3} | ={7} $ | ={a# * b#} $      |
+      +------+--------+-------------------+
+      | *Total*       | ={sum("c1:c4")} $ |
+      +------+--------+-------------------+
+
+Adding more functions
+=====================
+
+For now, the only available function is sum(). You can easily add new
+functions by adding them to SpreadSheet.tools. Please share your
+improvements by forking the project on github:
+https://github.com/patrickfournier/simplespreadsheet
+
 """
+
+__author__  = "Patrick Fournier"
+__version__ = "0.1"
+__license__ = "MIT License"
 
 import re
 import docutils
+import docutils.nodes
+import docutils.parsers
+import docutils.parsers.rst
 import rst2pdf
+import rst2pdf.genelements
 
 
 class SpreadSheet:
