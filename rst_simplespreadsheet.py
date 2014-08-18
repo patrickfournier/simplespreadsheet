@@ -143,7 +143,7 @@ class SpreadSheet:
     def getformula(self, key):
         return self._cells[key]
 
-    def __getitem__(self, key ):
+    def __getitem__(self, key):
         return eval(self._cells[key], SpreadSheet.tools, self)
 
     @staticmethod
@@ -175,7 +175,7 @@ class SpreadSheet:
         Utility function to return row and column index (0-based) from
         spreadsheet index (1-based).
         """
-        r = re.search('([a-z]+)([0-9]+)', c);
+        r = re.search('([a-z]+)([0-9]+)', c)
         col_str = r.group(1)
         row = int(r.group(2)) - 1
 
@@ -208,7 +208,7 @@ class SpreadSheet:
             for l in xrange(l1, l2+1):
                 ax = SpreadSheet.coords(c, l)
                 s += self[ax]
-        return s;
+        return s
 
 
 class SpreadsheetNode(docutils.nodes.General, docutils.nodes.Element):
